@@ -12,7 +12,11 @@ export class OverviewComponent implements OnInit {
   constructor(private feathers: FeathersService) { }
 
   async ngOnInit() {
-    const user = this.feathers.get('user');
+    const user = this.feathers.user;
+    if (user == null) {
+      console.error('The user is not logged in.');
+      this.feathers.logout();
+    }
     this.user_name = user.name;
   }
 

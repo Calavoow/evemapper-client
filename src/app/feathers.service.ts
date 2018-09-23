@@ -10,6 +10,9 @@ import feathersAuthClient from '@feathersjs/authentication-client';
 export class FeathersService {
   private _feathers = feathers();                     // init socket.io
   private _socket = io('http://localhost:3030');      // init feathers
+
+  user?: {userId: number, name: string};
+
   constructor() {
     this._feathers
       .configure(feathersSocketIOClient(this._socket))  // add socket.io plugin
@@ -38,7 +41,7 @@ export class FeathersService {
         return this._feathers.service('users').get(payload.userId);
       }).then(user => {
         console.log('User ', user);
-        this._feathers.set('user', user);
+        this.user = user;
         return user;
       });
   }
