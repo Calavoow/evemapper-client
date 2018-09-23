@@ -23,9 +23,24 @@ export class FeathersService {
     return this._feathers.service(name);
   }
 
+  public get(field: string) {
+    return this._feathers.get(field);
+  }
+
   // expose authentication
   public authenticate(): Promise<any> {
-    return this._feathers.authenticate();
+    return this._feathers.authenticate()
+      .then(response => {
+        console.log('Logged in ', response);
+        return this._feathers.passport.verifyJWT(response.accessToken);
+      }).then(payload => {
+        console.log('Payload ', payload);
+        return this._feathers.service('users').get(payload.userId);
+      }).then(user => {
+        console.log('User ', user);
+        this._feathers.set('user', user);
+        return user;
+      });
   }
 
   // expose logout

@@ -15,11 +15,11 @@ export class AuthGuard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     return this.feathers.authenticate()
       .then(x => {
-        // console.log('yes');
+        console.log('you are logged in', x);
         return true;
       })
       .catch(x => {
-        // console.log('no');
+        console.log('you are not logged in');
         this.router.navigate(['/login']);
         return false;
       });
